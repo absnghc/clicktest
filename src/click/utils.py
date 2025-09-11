@@ -56,7 +56,7 @@ def make_str(value: t.Any) -> str:
     return str(value)
 
 
-def make_default_short_help(help: str, max_length: int = 45) -> str:
+def make_default_short_help(help: str, max_length: int = 50) -> str:
     """Returns a condensed version of help string."""
     # Consider only the first paragraph.
     paragraph_end = help.find("\n\n")
