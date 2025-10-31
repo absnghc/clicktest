@@ -9,15 +9,16 @@ jobs:
         with:
           fetch-depth: 0
       
-      - name: Setup 627 Engine Action
-        run: |
-          mkdir -p .github/actions/627-engine
-          cp -r /Users/abhirajsingh/Downloads/627_Engine/github-action/* .github/actions/627-engine/
-      
       - name: Run 627 Engine
-        uses: ./.github/actions/627-engine
-        with:
-          api_key: ${{ secrets.ENGINE_627_API_KEY }}
-          backend_url: 'https://4bc882230c57.ngrok-free.app'
+        run: |
+          python3 /Users/abhirajsingh/Downloads/627_Engine/1metis_v2pipeline/orchestrator.py \
+            --repo-url ${{ github.server_url }}/${{ github.repository }} \
+            --base-sha ${{ github.event.pull_request.base.sha }} \
+            --head-sha ${{ github.event.pull_request.head.sha }} \
+            --pr-number ${{ github.event.pull_request.number }} \
+            --execution-mode graph-builder \
+            --output-dir ./analysis_output \
+            --backend-url https://4bc882230c57.ngrok-free.app \
+            --api-key ${{ secrets.ENGINE_627_API_KEY }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
