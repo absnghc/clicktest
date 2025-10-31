@@ -1,0 +1,23 @@
+name: 627 Engine Analysis
+on: pull_request
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup 627 Engine Action
+        run: |
+          mkdir -p .github/actions/627-engine
+          cp -r /Users/abhirajsingh/Downloads/627_Engine/github-action/* .github/actions/627-engine/
+      
+      - name: Run 627 Engine
+        uses: ./.github/actions/627-engine
+        with:
+          api_key: ${{ secrets.ENGINE_627_API_KEY }}
+          backend_url: 'https://4bc882230c57.ngrok-free.app'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
