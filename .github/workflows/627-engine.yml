@@ -17,7 +17,7 @@ jobs:
         with:
           registry: ghcr.io
           username: absnghc
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.GHCR_TOKEN }}
 
       - name: Run 627 Engine (Docker)
         run: |
