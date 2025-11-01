@@ -4,21 +4,29 @@ on: pull_request
 jobs:
   analyze:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
-      - name: Run 627 Engine
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run 627 Engine (Docker)
         run: |
-          python3 /Users/abhirajsingh/Downloads/627_Engine/1metis_v2pipeline/orchestrator.py \
-            --repo-url ${{ github.server_url }}/${{ github.repository }} \
-            --base-sha ${{ github.event.pull_request.base.sha }} \
-            --head-sha ${{ github.event.pull_request.head.sha }} \
-            --pr-number ${{ github.event.pull_request.number }} \
-            --execution-mode graph-builder \
-            --output-dir ./analysis_output \
-            --backend-url https://4bc882230c57.ngrok-free.app \
-            --api-key ${{ secrets.ENGINE_627_API_KEY }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          docker run --rm \
+            -e REPO_URL="${{ github.server_url }}/${{ github.repository }}" \
+            -e BASE_SHA="${{ github.event.pull_request.base.sha }}" \
+            -e HEAD_SHA="${{ github.event.pull_request.head.sha }}" \
+            -e PR_NUMBER="${{ github.event.pull_request.number }}" \
+            -e BACKEND_URL="https://4bc882230c57.ngrok-free.app" \
+            -e API_KEY="${{ secrets.ENGINE_627_API_KEY }}" \
+            -e GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}" \
+            ghcr.io/absnghc/627-engine-action:latest
