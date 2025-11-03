@@ -26,7 +26,7 @@ jobs:
             -e BASE_SHA="${{ github.event.pull_request.base.sha }}" \
             -e HEAD_SHA="${{ github.event.pull_request.head.sha }}" \
             -e PR_NUMBER="${{ github.event.pull_request.number }}" \
-            -e BACKEND_URL="https://4bc882230c57.ngrok-free.app" \
+            -e BACKEND_URL="${{ secrets.ENGINE_627_BACKEND_URL }}" \
             -e API_KEY="${{ secrets.ENGINE_627_API_KEY }}" \
             -e GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}" \
             ghcr.io/absnghc/627-engine-action:latest
